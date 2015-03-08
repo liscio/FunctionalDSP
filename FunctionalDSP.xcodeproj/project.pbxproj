@@ -10,6 +10,8 @@
 		83D1DCE71AACEF84007915C2 /* FunctionalDSP.h in Headers */ = {isa = PBXBuildFile; fileRef = 83D1DCE61AACEF84007915C2 /* FunctionalDSP.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		83D1DCED1AACEF84007915C2 /* FunctionalDSP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83D1DCE11AACEF84007915C2 /* FunctionalDSP.framework */; };
 		83D1DCF41AACEF84007915C2 /* FunctionalDSPTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D1DCF31AACEF84007915C2 /* FunctionalDSPTests.swift */; };
+		83D1DCFE1AACEFA0007915C2 /* FunctionalDSP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D1DCFD1AACEFA0007915C2 /* FunctionalDSP.swift */; };
+		83D1DD001AACF1AD007915C2 /* AudioFileIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D1DCFF1AACF1AD007915C2 /* AudioFileIO.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +31,8 @@
 		83D1DCEC1AACEF84007915C2 /* FunctionalDSPTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FunctionalDSPTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		83D1DCF21AACEF84007915C2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		83D1DCF31AACEF84007915C2 /* FunctionalDSPTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionalDSPTests.swift; sourceTree = "<group>"; };
+		83D1DCFD1AACEFA0007915C2 /* FunctionalDSP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FunctionalDSP.swift; sourceTree = "<group>"; };
+		83D1DCFF1AACF1AD007915C2 /* AudioFileIO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioFileIO.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +77,8 @@
 			children = (
 				83D1DCE61AACEF84007915C2 /* FunctionalDSP.h */,
 				83D1DCE41AACEF84007915C2 /* Supporting Files */,
+				83D1DCFD1AACEFA0007915C2 /* FunctionalDSP.swift */,
+				83D1DCFF1AACF1AD007915C2 /* AudioFileIO.swift */,
 			);
 			path = FunctionalDSP;
 			sourceTree = "<group>";
@@ -209,6 +215,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83D1DD001AACF1AD007915C2 /* AudioFileIO.swift in Sources */,
+				83D1DCFE1AACEFA0007915C2 /* FunctionalDSP.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -318,6 +326,7 @@
 		83D1DCF81AACEF84007915C2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -329,12 +338,14 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
 		83D1DCF91AACEF84007915C2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
