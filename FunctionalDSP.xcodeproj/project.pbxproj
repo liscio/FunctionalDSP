@@ -16,9 +16,8 @@
 		83D1DD051AAD1F30007915C2 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83D1DD041AAD1F30007915C2 /* AudioToolbox.framework */; };
 		83D1DD061AAD1F3E007915C2 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83D1DD041AAD1F30007915C2 /* AudioToolbox.framework */; };
 		83D1DD071AAD1FA4007915C2 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83D1DD011AAD1E54007915C2 /* CoreAudio.framework */; };
-		83D1DD0A1AAD20D1007915C2 /* CoreAudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83D1DD091AAD20D1007915C2 /* CoreAudioKit.framework */; };
-		83D1DD0B1AAD20D9007915C2 /* CoreAudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83D1DD091AAD20D1007915C2 /* CoreAudioKit.framework */; };
 		83D1DD0E1AAD213A007915C2 /* libswiftCoreAudio.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 83D1DD0D1AAD213A007915C2 /* libswiftCoreAudio.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		83F476FF1AADD14500001FDC /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F476FE1AADD14500001FDC /* Utilities.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,8 +54,8 @@
 		83D1DCFF1AACF1AD007915C2 /* AudioFileIO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioFileIO.swift; sourceTree = "<group>"; };
 		83D1DD011AAD1E54007915C2 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		83D1DD041AAD1F30007915C2 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
-		83D1DD091AAD20D1007915C2 /* CoreAudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudioKit.framework; path = System/Library/Frameworks/CoreAudioKit.framework; sourceTree = SDKROOT; };
 		83D1DD0D1AAD213A007915C2 /* libswiftCoreAudio.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libswiftCoreAudio.dylib; path = Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/libswiftCoreAudio.dylib; sourceTree = DEVELOPER_DIR; };
+		83F476FE1AADD14500001FDC /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,7 +64,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				83D1DD051AAD1F30007915C2 /* AudioToolbox.framework in Frameworks */,
-				83D1DD0B1AAD20D9007915C2 /* CoreAudioKit.framework in Frameworks */,
 				83D1DD021AAD1E54007915C2 /* CoreAudio.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -74,7 +72,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				83D1DD0A1AAD20D1007915C2 /* CoreAudioKit.framework in Frameworks */,
 				83D1DD071AAD1FA4007915C2 /* CoreAudio.framework in Frameworks */,
 				83D1DD061AAD1F3E007915C2 /* AudioToolbox.framework in Frameworks */,
 				83D1DCED1AACEF84007915C2 /* FunctionalDSP.framework in Frameworks */,
@@ -88,7 +85,6 @@
 			isa = PBXGroup;
 			children = (
 				83D1DD0D1AAD213A007915C2 /* libswiftCoreAudio.dylib */,
-				83D1DD091AAD20D1007915C2 /* CoreAudioKit.framework */,
 				83D1DD041AAD1F30007915C2 /* AudioToolbox.framework */,
 				83D1DD011AAD1E54007915C2 /* CoreAudio.framework */,
 				83D1DCE31AACEF84007915C2 /* FunctionalDSP */,
@@ -113,6 +109,7 @@
 				83D1DCE41AACEF84007915C2 /* Supporting Files */,
 				83D1DCFD1AACEFA0007915C2 /* FunctionalDSP.swift */,
 				83D1DCFF1AACF1AD007915C2 /* AudioFileIO.swift */,
+				83F476FE1AADD14500001FDC /* Utilities.swift */,
 			);
 			path = FunctionalDSP;
 			sourceTree = "<group>";
@@ -250,6 +247,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83F476FF1AADD14500001FDC /* Utilities.swift in Sources */,
 				83D1DD001AACF1AD007915C2 /* AudioFileIO.swift in Sources */,
 				83D1DCFE1AACEFA0007915C2 /* FunctionalDSP.swift in Sources */,
 			);
@@ -446,6 +444,7 @@
 				83D1DCF91AACEF84007915C2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		83D1DCFA1AACEF84007915C2 /* Build configuration list for PBXNativeTarget "FunctionalDSPTests" */ = {
 			isa = XCConfigurationList;
@@ -454,6 +453,7 @@
 				83D1DCFC1AACEF84007915C2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -59,6 +59,27 @@ class FunctionalDSPTests: XCTestCase {
             XCTAssertTrue(false, "oops")
         }
     }
-
+    
+    func testWhite() {
+        let sampleRate = 44100
+        
+        let white = whiteNoise()
+        if let af = AudioFile(forWritingToURL: NSURL(fileURLWithPath: "/Users/chris/testwhite.wav")!, withBitDepth: 16, sampleRate: 44100, channelCount: 1) {
+            af.writeSamples(getOutput(white, 0, 88200))
+            af.close()
+            XCTAssertTrue(true, "yay")
+        } else {
+            XCTAssertTrue(false, "oops")
+        }
+        
+        let pink = pinkFilter(whiteNoise())
+        if let af = AudioFile(forWritingToURL: NSURL(fileURLWithPath: "/Users/chris/testpink.wav")!, withBitDepth: 16, sampleRate: 44100, channelCount: 1) {
+            af.writeSamples(getOutput(pink, 0, 88200))
+            af.close()
+            XCTAssertTrue(true, "yay")
+        } else {
+            XCTAssertTrue(false, "oops")
+        }
+    }
     
 }
