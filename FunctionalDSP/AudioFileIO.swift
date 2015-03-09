@@ -10,10 +10,6 @@ import Foundation
 import CoreAudio
 import AudioToolbox
 
-func audioCallSucceeded(status: OSStatus) -> Bool {
-    return status != noErr
-}
-
 func audioCallFailed(status: OSStatus) -> OSStatus? {
     if ( status != noErr ) {
         return status
@@ -27,39 +23,15 @@ extension SampleType {
     }
 }
 
-/*
-    destFormat.mSampleRate = sampleRate;
-    destFormat.mFormatID = kAudioFormatLinearPCM;
-    
-    if ( fileType == kAudioFileCAFType ) {
-        // The CAF type allows us to have the closest to 1:1 correspondence between single precision real vectors and audio files, because of its ability to store floats.
-        // We choose to specify Little Endian floats because they are native on Intel and ARM CPUs. (Using the native packed floats bitflag would be a mistake, as it would differ between platforms.)
-        destFormat.mFormatFlags = kAudioFormatFlagIsFloat | kAudioFormatFlagIsPacked;
-    } else {
-        // Both AIFF and WAV file formats expect signed ints
-        destFormat.mFormatFlags = kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked;
-    }
-    
-    if ( fileType == kAudioFileAIFFType ) {
-        // For historical/format reasons, AIFF files are also big endian.
-        destFormat.mFormatFlags |= kAudioFormatFlagIsBigEndian;
-    }
-    
-    destFormat.mFramesPerPacket = 1;
-    destFormat.mChannelsPerFrame = 1;
-    destFormat.mBitsPerChannel = (UInt32)bitDepth;
-    destFormat.mBytesPerFrame = (UInt32)(bitDepth / 8);
-    destFormat.mBytesPerPacket = destFormat.mBytesPerFrame * destFormat.mFramesPerPacket;
-*/
-
 public class AudioFile {
-    /// The audio file reference (used internally)
     var audioFileID = AudioFileID()
     var audioConverter = AudioConverterRef()
-    let sampleRate: Int
-    let channelCount: Int
-    let bitDepth: Int
     var fileType: AudioFileTypeID = 0
+    
+    public let sampleRate: Int
+    public let channelCount: Int
+    public let bitDepth: Int
+
     var fileOpened: Bool = false
     
     var nativeStreamDescription: AudioStreamBasicDescription {
@@ -82,7 +54,7 @@ public class AudioFile {
             mSampleRate: Float64(sampleRate),
             mFormatID: UInt32(kAudioFormatLinearPCM),
             mFormatFlags: UInt32(kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked | endianFlag),
-            mBytesPerPacket: UInt32(1 * SampleType.audioByteSize),
+            mBytesPerPacket: UInt32(channelCount * bytesPerSample),
             mFramesPerPacket: UInt32(1),
             mBytesPerFrame: UInt32(channelCount * bytesPerSample),
             mChannelsPerFrame: UInt32(channelCount),
@@ -137,6 +109,10 @@ public class AudioFile {
         if fileOpened {
             destroyAudioObjects()
         }
+        
+        if writeBuffer != nil {
+            destroyAudioBuffer()
+        }
     }
     
     public func close() {
@@ -146,6 +122,17 @@ public class AudioFile {
     var writeBufferSize = 0
     var writeBuffer: UnsafeMutablePointer<UInt8> = nil
     
+    func destroyAudioBuffer() {
+        writeBuffer.dealloc(writeBufferSize)
+        writeBufferSize = 0
+        writeBuffer = nil
+    }
+    
+    func allocateAudioBufferWithSize(size: Int) {
+        writeBufferSize = size
+        writeBuffer = UnsafeMutablePointer.alloc(writeBufferSize)
+    }
+    
     var fileWritePosition: Int64 = 0
     
     public func writeSamples(samples: [SampleType]) -> Bool {
@@ -154,13 +141,10 @@ public class AudioFile {
         let outputByteSize = samples.count * Int(fileStreamDescription.mBytesPerFrame)
         
         if writeBuffer != nil && writeBufferSize < outputByteSize {
-            writeBuffer.dealloc(writeBufferSize)
-            writeBufferSize = 0
-            writeBuffer = nil
+            destroyAudioBuffer()
         }
         if writeBuffer == nil {
-            writeBufferSize = outputByteSize
-            writeBuffer = UnsafeMutablePointer.alloc(writeBufferSize)
+            allocateAudioBufferWithSize(outputByteSize)
         }
         
         var convertedSize = UInt32(outputByteSize)
@@ -173,6 +157,8 @@ public class AudioFile {
             println( "Failed to write audio data to file. \(status)" )
             return false
         }
+        
+        fileWritePosition = fileWritePosition + Int64(convertedSize)
         
         return true
     }

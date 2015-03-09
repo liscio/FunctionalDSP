@@ -38,14 +38,14 @@ public func scale(s: Signal, amplitude: ParameterType) -> Signal {
 }
 
 /// Mix two signals together
-public func mix_2(s1: Signal, s2: Signal) -> Signal {
+public func mix(s1: Signal, s2: Signal) -> Signal {
     return { i in
         return s1(i) + s2(i)
     }
 }
 
 /// Mix an arbitrary number of signals together
-public func mix_n(signals: [Signal]) -> Signal {
+public func mix(signals: [Signal]) -> Signal {
     return { i in
         return signals.reduce(SampleType(0)) { $0 + $1(i) }
     }

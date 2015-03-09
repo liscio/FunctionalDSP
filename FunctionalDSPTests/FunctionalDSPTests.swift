@@ -29,32 +29,30 @@ let dtmfFrequencies = [
 func dtmfTone(digit: Int, sampleRate: Int) -> Signal {
     assert( digit < dtmfFrequencies.count )
     let (f1, f2) = dtmfFrequencies[digit]
-    return mix_2( sineWave(sampleRate, f1), sineWave(sampleRate, f2) )
+    return mix( sineWave(sampleRate, f1), sineWave(sampleRate, f2) )
 }
 
 class FunctionalDSPTests: XCTestCase {
-    
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-    
     func testDTMF() {
         let sampleRate = 44100
         
         let phoneNumber = [8, 6, 7, 5, 3, 0, 9]
         let signals = phoneNumber.map { dtmfTone($0, sampleRate) }
         
-        let toneDuration = sampleRate
-        let samples = signals.map { getOutput($0, 0, toneDuration) }.reduce([], combine: +)
+        let toneDuration = Int(Float(sampleRate) * 0.2)
+
+        // The below concatenates all the signal samples together in a continuous tone
+        // let samples = signals.map { getOutput($0, 0, toneDuration) }.reduce([], combine: +)
         
+        let silence = [SampleType](count: toneDuration, repeatedValue: 0)
+
         if let af = AudioFile(forWritingToURL: NSURL(fileURLWithPath: "/Users/chris/testfile.wav")!, withBitDepth: 16, sampleRate: 44100, channelCount: 1) {
-            af.writeSamples(samples)
+            
+            for signal in signals {
+                af.writeSamples(getOutput(signal, 0, toneDuration))
+                af.writeSamples(silence)
+            }
+            
             af.close()
             XCTAssertTrue(true, "yay")
         } else {
