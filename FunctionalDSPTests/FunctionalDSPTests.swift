@@ -8,6 +8,29 @@
 
 import Cocoa
 import XCTest
+import FunctionalDSP
+
+let dtmfFrequencies = [
+    ( 941.0, 1336.0 ),
+    
+    ( 697.0, 1209.0 ),
+    ( 697.0, 1336.0 ),
+    ( 697.0, 1477.0 ),
+    
+    ( 770.0, 1209.0 ),
+    ( 770.0, 1336.0 ),
+    ( 770.0, 1477.0 ),
+    
+    ( 852.0, 1209.0 ),
+    ( 852.0, 1336.0 ),
+    ( 852.0, 1477.0 ),
+]
+
+func dtmfTone(digit: Int, sampleRate: Int) -> Signal {
+    assert( digit < dtmfFrequencies.count )
+    let (f1, f2) = dtmfFrequencies[digit]
+    return mix_2( sineWave(sampleRate, f1), sineWave(sampleRate, f2) )
+}
 
 class FunctionalDSPTests: XCTestCase {
     
@@ -21,16 +44,23 @@ class FunctionalDSPTests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
-        // This is an example of a functional test case.
-        XCTAssert(true, "Pass")
-    }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measureBlock() {
-            // Put the code you want to measure the time of here.
+    func testDTMF() {
+        let sampleRate = 44100
+        
+        let phoneNumber = [8, 6, 7, 5, 3, 0, 9]
+        let signals = phoneNumber.map { dtmfTone($0, sampleRate) }
+        
+        let toneDuration = sampleRate
+        let samples = signals.map { getOutput($0, 0, toneDuration) }.reduce([], combine: +)
+        
+        if let af = AudioFile(forWritingToURL: NSURL(fileURLWithPath: "/Users/chris/testfile.wav")!, withBitDepth: 16, sampleRate: 44100, channelCount: 1) {
+            af.writeSamples(samples)
+            af.close()
+            XCTAssertTrue(true, "yay")
+        } else {
+            XCTAssertTrue(false, "oops")
         }
     }
+
     
 }

@@ -7,6 +7,8 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import <CoreAudio/CoreAudio.h>
+#import <AudioToolbox/AudioToolbox.h>
 
 //! Project version number for FunctionalDSP.
 FOUNDATION_EXPORT double FunctionalDSPVersionNumber;

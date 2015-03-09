@@ -7,10 +7,18 @@
 //
 
 import Foundation
+import CoreAudio
 import AudioToolbox
 
-func audioCallFailed(status: OSStatus) -> Bool {
+func audioCallSucceeded(status: OSStatus) -> Bool {
     return status != noErr
+}
+
+func audioCallFailed(status: OSStatus) -> OSStatus? {
+    if ( status != noErr ) {
+        return status
+    }
+    return nil
 }
 
 extension SampleType {
@@ -46,15 +54,19 @@ extension SampleType {
 
 public class AudioFile {
     /// The audio file reference (used internally)
-    var audioFileRef: ExtAudioFileRef!
+    var audioFileID = AudioFileID()
+    var audioConverter = AudioConverterRef()
     let sampleRate: Int
     let channelCount: Int
+    let bitDepth: Int
+    var fileType: AudioFileTypeID = 0
+    var fileOpened: Bool = false
     
     var nativeStreamDescription: AudioStreamBasicDescription {
         return AudioStreamBasicDescription(
             mSampleRate: Float64(sampleRate),
             mFormatID: UInt32(kAudioFormatLinearPCM),
-            mFormatFlags: UInt32(0),
+            mFormatFlags: UInt32(kAudioFormatFlagIsFloat | kAudioFormatFlagIsPacked),
             mBytesPerPacket: SampleType.audioByteSize,
             mFramesPerPacket: UInt32(1),
             mBytesPerFrame: UInt32(channelCount) * SampleType.audioByteSize,
@@ -63,21 +75,114 @@ public class AudioFile {
             mReserved: UInt32(0))
     }
     
-    public init?(forWritingToURL url: NSURL, withSampleRate sampleRate: Int, channelCount: Int = 1) {
+    var fileStreamDescription: AudioStreamBasicDescription {
+        let endianFlag: Int = (Int(fileType) == kAudioFileAIFFType ? kAudioFormatFlagIsBigEndian : 0)
+        let bytesPerSample: Int = bitDepth / 8
+        return AudioStreamBasicDescription(
+            mSampleRate: Float64(sampleRate),
+            mFormatID: UInt32(kAudioFormatLinearPCM),
+            mFormatFlags: UInt32(kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked | endianFlag),
+            mBytesPerPacket: UInt32(1 * SampleType.audioByteSize),
+            mFramesPerPacket: UInt32(1),
+            mBytesPerFrame: UInt32(channelCount * bytesPerSample),
+            mChannelsPerFrame: UInt32(channelCount),
+            mBitsPerChannel: UInt32(bytesPerSample * 8),
+            mReserved: UInt32(0))
+    }
+    
+    public init?(forWritingToURL url: NSURL, withBitDepth bitDepth: Int, sampleRate: Int, channelCount: Int = 1) {
         self.sampleRate = sampleRate
         self.channelCount = channelCount
+        self.bitDepth = bitDepth
+        
+        assert(channelCount == 1, "Sorry, cannot (yet) support more than 1 channel output")
+
         if let fileType = inferTypeFromURL(url) {
-            if audioCallFailed(ExtAudioFileCreateWithURL(url, fileType, <#inStreamDesc: UnsafePointer<AudioStreamBasicDescription>#>, <#inChannelLayout: UnsafePointer<AudioChannelLayout>#>, <#inFlags: UInt32#>, <#outExtAudioFile: UnsafeMutablePointer<ExtAudioFileRef>#>)
+            self.fileType = fileType
+            
+            var sourceFormat = nativeStreamDescription
+            var destinationFormat = fileStreamDescription
+            
+            if let status = audioCallFailed(AudioFileCreateWithURL(url as CFURL, self.fileType, &destinationFormat, UInt32(kAudioFileFlags_EraseFile), &audioFileID)) {
+                println( "Failed to open audio file for writing with status \(status): \(url)" )
+                return nil;
+            }
+            
+            if let status = audioCallFailed(AudioConverterNew(&sourceFormat, &destinationFormat, &audioConverter)) {
+                println( "Failed to create audio converter. \(status)" )
+                return nil;
+            }
+            
+            fileOpened = true
+        } else {
+            println( "Failed to infer audio file type for file: \(url)" )
+            return nil
         }
-        return nil
+    }
+    
+    func destroyAudioObjects() {
+        if let status = audioCallFailed(AudioConverterDispose(audioConverter)) {
+            println("Failed to dispose audio converter. \(status)")
+        }
+        audioConverter = AudioConverterRef()
+        
+        if let status = audioCallFailed(AudioFileClose(audioFileID)) {
+            println("Failed to close audio file. \(status)")
+        }
+        audioFileID = AudioFileID()
+        fileOpened = false
+    }
+    
+    deinit {
+        if fileOpened {
+            destroyAudioObjects()
+        }
+    }
+    
+    public func close() {
+        destroyAudioObjects()
+    }
+    
+    var writeBufferSize = 0
+    var writeBuffer: UnsafeMutablePointer<UInt8> = nil
+    
+    var fileWritePosition: Int64 = 0
+    
+    public func writeSamples(samples: [SampleType]) -> Bool {
+        assert(fileOpened)
+        
+        let outputByteSize = samples.count * Int(fileStreamDescription.mBytesPerFrame)
+        
+        if writeBuffer != nil && writeBufferSize < outputByteSize {
+            writeBuffer.dealloc(writeBufferSize)
+            writeBufferSize = 0
+            writeBuffer = nil
+        }
+        if writeBuffer == nil {
+            writeBufferSize = outputByteSize
+            writeBuffer = UnsafeMutablePointer.alloc(writeBufferSize)
+        }
+        
+        var convertedSize = UInt32(outputByteSize)
+        if let status = audioCallFailed(AudioConverterConvertBuffer(audioConverter, UInt32(samples.count * sizeof(SampleType)), samples, &convertedSize, writeBuffer)) {
+            println( "Failed to convert audio data for writing. \(status)" )
+            return false
+        }
+        
+        if let status = audioCallFailed(AudioFileWriteBytes(audioFileID, Boolean(0), fileWritePosition, &convertedSize, writeBuffer)) {
+            println( "Failed to write audio data to file. \(status)" )
+            return false
+        }
+        
+        return true
     }
     
     func inferTypeFromURL(url: NSURL) -> AudioFileTypeID? {
         if let fileExtension = url.pathExtension?.lowercaseString {
-            switch fileExtension {
-            case "aif":
+            switch fileExtension.lowercaseString {
+            case "aif", "aiff":
                 return AudioFileTypeID(kAudioFileAIFFType)
-            case "wav":
+            case "wav", "wave":
                 return AudioFileTypeID(kAudioFileWAVEType)
             default:
                 return nil
@@ -86,20 +191,3 @@ public class AudioFile {
         return nil
     }
 }
-
-//func writeSamples(samples: [SampleType], toAudioFileAtURL url: NSURL) {
-//    let audioFile = ExtAudioFileCreateWithURL(url)
-//
-//
-//
-//    ExtAudioFileSetProperty(audioFile, kExtAudioFileProperty_ClientDataFormat, sizeof(clientFormat), &clientFormat)
-//    ExtAudioFileSetProperty(audioFile, kExtAudioFileProperty_FileDataFormat, sizeof(fileFormat), &fileFormat)
-//
-//    let kWriteBufferSize = 16384
-//    let bufferCount = samples.count / kWriteBufferSize
-//    for i in 0..<bufferCount {
-//        ExtAudioFileWrite(audioFile, framesToWrite, &buffer)
-//    }
-//
-//    ExtAudioFileDispose(audioFile)
-//}
