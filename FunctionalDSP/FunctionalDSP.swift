@@ -13,7 +13,11 @@ import Accelerate
 public typealias ParameterType = Double
 public typealias SampleType = Float
 
-public typealias Signal = (Int) -> SampleType
+public typealias Signal = Int -> SampleType
+
+public func NullSignal(_: Int) -> SampleType {
+    return 0
+}
 
 // MARK: Basic Operations
 
