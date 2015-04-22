@@ -21,7 +21,6 @@ public protocol BlockType {
     init(inputCount: Int, outputCount: Int, process: [SignalType] -> [SignalType])
 }
 
-
 public struct Block: BlockType {
     typealias SignalType = Signal
     
@@ -34,6 +33,10 @@ public struct Block: BlockType {
         self.outputCount = outputCount
         self.process = process
     }
+}
+
+public func identity(inputs: Int) -> Block {
+    return Block(inputCount: inputs, outputCount: inputs, process: { $0 })
 }
 
 //
@@ -111,7 +114,7 @@ public func split<B: BlockType>(lhs: B, rhs: B) -> B {
         var rightInputs = Array<B.SignalType>()
         
         // Replicate the channels from the lhs to each of the inputs
-        let k = rhs.inputCount / lhs.outputCount
+        let k = lhs.outputCount
         for i in 0..<rhs.inputCount {
             rightInputs.append(leftOutputs[i%k])
         }
