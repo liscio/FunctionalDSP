@@ -18,6 +18,12 @@
 		83D1DD071AAD1FA4007915C2 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83D1DD011AAD1E54007915C2 /* CoreAudio.framework */; };
 		83D1DD0E1AAD213A007915C2 /* libswiftCoreAudio.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 83D1DD0D1AAD213A007915C2 /* libswiftCoreAudio.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		83E8D5D81ADD455100B3DC9F /* Blocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E8D5D71ADD455100B3DC9F /* Blocks.swift */; };
+		83E8D5DC1ADDB4B100B3DC9F /* AudioEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E8D5DB1ADDB4B100B3DC9F /* AudioEngine.swift */; };
+		83E8D5E71ADDC82A00B3DC9F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E8D5E61ADDC82A00B3DC9F /* AppDelegate.swift */; };
+		83E8D5E91ADDC82A00B3DC9F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E8D5E81ADDC82A00B3DC9F /* ViewController.swift */; };
+		83E8D5EB1ADDC82A00B3DC9F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83E8D5EA1ADDC82A00B3DC9F /* Images.xcassets */; };
+		83E8D5EE1ADDC82A00B3DC9F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83E8D5EC1ADDC82A00B3DC9F /* Main.storyboard */; };
+		83E8D5FA1ADDC82B00B3DC9F /* TestPlaybackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E8D5F91ADDC82B00B3DC9F /* TestPlaybackTests.swift */; };
 		83F476FF1AADD14500001FDC /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F476FE1AADD14500001FDC /* Utilities.swift */; };
 /* End PBXBuildFile section */
 
@@ -28,6 +34,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 83D1DCE01AACEF84007915C2;
 			remoteInfo = FunctionalDSP;
+		};
+		83E8D5F41ADDC82A00B3DC9F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83D1DCD81AACEF83007915C2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 83E8D5E11ADDC82A00B3DC9F;
+			remoteInfo = TestPlayback;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -57,6 +70,17 @@
 		83D1DD041AAD1F30007915C2 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		83D1DD0D1AAD213A007915C2 /* libswiftCoreAudio.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libswiftCoreAudio.dylib; path = Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/libswiftCoreAudio.dylib; sourceTree = DEVELOPER_DIR; };
 		83E8D5D71ADD455100B3DC9F /* Blocks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Blocks.swift; sourceTree = "<group>"; };
+		83E8D5DB1ADDB4B100B3DC9F /* AudioEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioEngine.swift; sourceTree = "<group>"; };
+		83E8D5DD1ADDC65E00B3DC9F /* PlaybackPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; name = PlaybackPlayground.playground; path = FunctionalDSPTests/PlaybackPlayground.playground; sourceTree = SOURCE_ROOT; };
+		83E8D5E21ADDC82A00B3DC9F /* TestPlayback.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestPlayback.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		83E8D5E51ADDC82A00B3DC9F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		83E8D5E61ADDC82A00B3DC9F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		83E8D5E81ADDC82A00B3DC9F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		83E8D5EA1ADDC82A00B3DC9F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		83E8D5ED1ADDC82A00B3DC9F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		83E8D5F31ADDC82A00B3DC9F /* TestPlaybackTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TestPlaybackTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		83E8D5F81ADDC82B00B3DC9F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		83E8D5F91ADDC82B00B3DC9F /* TestPlaybackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestPlaybackTests.swift; sourceTree = "<group>"; };
 		83F476FE1AADD14500001FDC /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -80,6 +104,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		83E8D5DF1ADDC82A00B3DC9F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		83E8D5F01ADDC82A00B3DC9F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -91,6 +129,8 @@
 				83D1DD011AAD1E54007915C2 /* CoreAudio.framework */,
 				83D1DCE31AACEF84007915C2 /* FunctionalDSP */,
 				83D1DCF01AACEF84007915C2 /* FunctionalDSPTests */,
+				83E8D5E31ADDC82A00B3DC9F /* TestPlayback */,
+				83E8D5F61ADDC82B00B3DC9F /* TestPlaybackTests */,
 				83D1DCE21AACEF84007915C2 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -100,6 +140,8 @@
 			children = (
 				83D1DCE11AACEF84007915C2 /* FunctionalDSP.framework */,
 				83D1DCEC1AACEF84007915C2 /* FunctionalDSPTests.xctest */,
+				83E8D5E21ADDC82A00B3DC9F /* TestPlayback.app */,
+				83E8D5F31ADDC82A00B3DC9F /* TestPlaybackTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -107,11 +149,13 @@
 		83D1DCE31AACEF84007915C2 /* FunctionalDSP */ = {
 			isa = PBXGroup;
 			children = (
+				83E8D5DD1ADDC65E00B3DC9F /* PlaybackPlayground.playground */,
 				83D1DCE61AACEF84007915C2 /* FunctionalDSP.h */,
 				83D1DCE41AACEF84007915C2 /* Supporting Files */,
 				83D1DCFD1AACEFA0007915C2 /* FunctionalDSP.swift */,
 				83E8D5D71ADD455100B3DC9F /* Blocks.swift */,
 				83D1DCFF1AACF1AD007915C2 /* AudioFileIO.swift */,
+				83E8D5DB1ADDB4B100B3DC9F /* AudioEngine.swift */,
 				83F476FE1AADD14500001FDC /* Utilities.swift */,
 			);
 			path = FunctionalDSP;
@@ -138,6 +182,43 @@
 			isa = PBXGroup;
 			children = (
 				83D1DCF21AACEF84007915C2 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		83E8D5E31ADDC82A00B3DC9F /* TestPlayback */ = {
+			isa = PBXGroup;
+			children = (
+				83E8D5E61ADDC82A00B3DC9F /* AppDelegate.swift */,
+				83E8D5E81ADDC82A00B3DC9F /* ViewController.swift */,
+				83E8D5EA1ADDC82A00B3DC9F /* Images.xcassets */,
+				83E8D5EC1ADDC82A00B3DC9F /* Main.storyboard */,
+				83E8D5E41ADDC82A00B3DC9F /* Supporting Files */,
+			);
+			path = TestPlayback;
+			sourceTree = "<group>";
+		};
+		83E8D5E41ADDC82A00B3DC9F /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				83E8D5E51ADDC82A00B3DC9F /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		83E8D5F61ADDC82B00B3DC9F /* TestPlaybackTests */ = {
+			isa = PBXGroup;
+			children = (
+				83E8D5F91ADDC82B00B3DC9F /* TestPlaybackTests.swift */,
+				83E8D5F71ADDC82B00B3DC9F /* Supporting Files */,
+			);
+			path = TestPlaybackTests;
+			sourceTree = "<group>";
+		};
+		83E8D5F71ADDC82B00B3DC9F /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				83E8D5F81ADDC82B00B3DC9F /* Info.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -193,6 +274,41 @@
 			productReference = 83D1DCEC1AACEF84007915C2 /* FunctionalDSPTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		83E8D5E11ADDC82A00B3DC9F /* TestPlayback */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 83E8D5FB1ADDC82B00B3DC9F /* Build configuration list for PBXNativeTarget "TestPlayback" */;
+			buildPhases = (
+				83E8D5DE1ADDC82A00B3DC9F /* Sources */,
+				83E8D5DF1ADDC82A00B3DC9F /* Frameworks */,
+				83E8D5E01ADDC82A00B3DC9F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TestPlayback;
+			productName = TestPlayback;
+			productReference = 83E8D5E21ADDC82A00B3DC9F /* TestPlayback.app */;
+			productType = "com.apple.product-type.application";
+		};
+		83E8D5F21ADDC82A00B3DC9F /* TestPlaybackTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 83E8D5FE1ADDC82B00B3DC9F /* Build configuration list for PBXNativeTarget "TestPlaybackTests" */;
+			buildPhases = (
+				83E8D5EF1ADDC82A00B3DC9F /* Sources */,
+				83E8D5F01ADDC82A00B3DC9F /* Frameworks */,
+				83E8D5F11ADDC82A00B3DC9F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				83E8D5F51ADDC82A00B3DC9F /* PBXTargetDependency */,
+			);
+			name = TestPlaybackTests;
+			productName = TestPlaybackTests;
+			productReference = 83E8D5F31ADDC82A00B3DC9F /* TestPlaybackTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -208,6 +324,13 @@
 					83D1DCEB1AACEF84007915C2 = {
 						CreatedOnToolsVersion = 6.3;
 					};
+					83E8D5E11ADDC82A00B3DC9F = {
+						CreatedOnToolsVersion = 6.3;
+					};
+					83E8D5F21ADDC82A00B3DC9F = {
+						CreatedOnToolsVersion = 6.3;
+						TestTargetID = 83E8D5E11ADDC82A00B3DC9F;
+					};
 				};
 			};
 			buildConfigurationList = 83D1DCDB1AACEF83007915C2 /* Build configuration list for PBXProject "FunctionalDSP" */;
@@ -216,6 +339,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 83D1DCD71AACEF83007915C2;
 			productRefGroup = 83D1DCE21AACEF84007915C2 /* Products */;
@@ -224,6 +348,8 @@
 			targets = (
 				83D1DCE01AACEF84007915C2 /* FunctionalDSP */,
 				83D1DCEB1AACEF84007915C2 /* FunctionalDSPTests */,
+				83E8D5E11ADDC82A00B3DC9F /* TestPlayback */,
+				83E8D5F21ADDC82A00B3DC9F /* TestPlaybackTests */,
 			);
 		};
 /* End PBXProject section */
@@ -243,6 +369,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		83E8D5E01ADDC82A00B3DC9F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				83E8D5EB1ADDC82A00B3DC9F /* Images.xcassets in Resources */,
+				83E8D5EE1ADDC82A00B3DC9F /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		83E8D5F11ADDC82A00B3DC9F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -252,6 +394,7 @@
 			files = (
 				83F476FF1AADD14500001FDC /* Utilities.swift in Sources */,
 				83E8D5D81ADD455100B3DC9F /* Blocks.swift in Sources */,
+				83E8D5DC1ADDB4B100B3DC9F /* AudioEngine.swift in Sources */,
 				83D1DD001AACF1AD007915C2 /* AudioFileIO.swift in Sources */,
 				83D1DCFE1AACEFA0007915C2 /* FunctionalDSP.swift in Sources */,
 			);
@@ -265,6 +408,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		83E8D5DE1ADDC82A00B3DC9F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				83E8D5E91ADDC82A00B3DC9F /* ViewController.swift in Sources */,
+				83E8D5E71ADDC82A00B3DC9F /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		83E8D5EF1ADDC82A00B3DC9F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				83E8D5FA1ADDC82B00B3DC9F /* TestPlaybackTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -273,7 +433,23 @@
 			target = 83D1DCE01AACEF84007915C2 /* FunctionalDSP */;
 			targetProxy = 83D1DCEE1AACEF84007915C2 /* PBXContainerItemProxy */;
 		};
+		83E8D5F51ADDC82A00B3DC9F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 83E8D5E11ADDC82A00B3DC9F /* TestPlayback */;
+			targetProxy = 83E8D5F41ADDC82A00B3DC9F /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		83E8D5EC1ADDC82A00B3DC9F /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				83E8D5ED1ADDC82A00B3DC9F /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		83D1DCF51AACEF84007915C2 /* Debug */ = {
@@ -375,6 +551,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -394,6 +571,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
 			};
 			name = Release;
 		};
@@ -429,6 +607,70 @@
 			};
 			name = Release;
 		};
+		83E8D5FC1ADDC82B00B3DC9F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = TestPlayback/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		83E8D5FD1ADDC82B00B3DC9F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = TestPlayback/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		83E8D5FF1ADDC82B00B3DC9F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = TestPlaybackTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestPlayback.app/Contents/MacOS/TestPlayback";
+			};
+			name = Debug;
+		};
+		83E8D6001ADDC82B00B3DC9F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = TestPlaybackTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestPlayback.app/Contents/MacOS/TestPlayback";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -458,6 +700,22 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		83E8D5FB1ADDC82B00B3DC9F /* Build configuration list for PBXNativeTarget "TestPlayback" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				83E8D5FC1ADDC82B00B3DC9F /* Debug */,
+				83E8D5FD1ADDC82B00B3DC9F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		83E8D5FE1ADDC82B00B3DC9F /* Build configuration list for PBXNativeTarget "TestPlaybackTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				83E8D5FF1ADDC82B00B3DC9F /* Debug */,
+				83E8D6001ADDC82B00B3DC9F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
