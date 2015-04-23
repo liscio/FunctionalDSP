@@ -45,8 +45,8 @@ public func identity(inputs: Int) -> Block {
 //   -----------
 //
 
-/// Runs two blocks sequentially
-public func sequential<B: BlockType>(lhs: B, rhs: B) -> B {
+/// Runs two blocks serially
+public func serial<B: BlockType>(lhs: B, rhs: B) -> B {
     return B(inputCount: lhs.inputCount, outputCount: rhs.outputCount, process: { inputs in
         return rhs.process(lhs.process(inputs))
     })
@@ -135,9 +135,9 @@ public func |-<B: BlockType>(lhs: B, rhs: B) -> B {
     return parallel(lhs, rhs)
 }
 
-// Sequential
+// Serial
 public func --<B: BlockType>(lhs: B, rhs: B) -> B {
-    return sequential(lhs, rhs)
+    return serial(lhs, rhs)
 }
 
 // Split
