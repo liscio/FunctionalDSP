@@ -65,7 +65,7 @@ public func parallel<B: BlockType>(lhs: B, rhs: B) -> B {
     let totalOutputs = lhs.outputCount + rhs.outputCount
     
     return B(inputCount: totalInputs, outputCount: totalOutputs, process: { inputs in
-        var outputs = Array<B.SignalType>()
+        var outputs: [B.SignalType] = []
         
         outputs += lhs.process(Array<B.SignalType>(inputs[0..<lhs.inputCount]))
         outputs += rhs.process(Array<B.SignalType>(inputs[lhs.inputCount..<lhs.inputCount+rhs.inputCount]))
@@ -84,7 +84,7 @@ public func parallel<B: BlockType>(lhs: B, rhs: B) -> B {
 public func merge<B: BlockType where B.SignalType == Signal>(lhs: B, rhs: B) -> B {
     return B(inputCount: lhs.inputCount, outputCount: rhs.outputCount, process: { inputs in
         let leftOutputs = lhs.process(inputs)
-        var rightInputs = Array<B.SignalType>()
+        var rightInputs: [B.SignalType] = []
 
         let k = lhs.outputCount / rhs.inputCount
         for i in 0..<rhs.inputCount  {
@@ -111,7 +111,7 @@ public func merge<B: BlockType where B.SignalType == Signal>(lhs: B, rhs: B) -> 
 public func split<B: BlockType>(lhs: B, rhs: B) -> B {
     return B(inputCount: lhs.inputCount, outputCount: rhs.outputCount, process: { inputs in
         let leftOutputs = lhs.process(inputs)
-        var rightInputs = Array<B.SignalType>()
+        var rightInputs: [B.SignalType] = []
         
         // Replicate the channels from the lhs to each of the inputs
         let k = lhs.outputCount
