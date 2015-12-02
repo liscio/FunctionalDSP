@@ -88,7 +88,7 @@ public struct PinkFilter {
 
 var gFilt = PinkFilter()
 public func pinkFilter(x: Signal) -> Signal {
-    return filt(x, gFilt.b, gFilt.a, &gFilt.w)
+    return filt(x, b: gFilt.b, a: gFilt.a, w: &gFilt.w)
 }
 
 public func filt(x: Signal, var b: [FilterType], var a: [FilterType], inout w: [FilterType]!) -> Signal {
@@ -112,13 +112,13 @@ public func filt(x: Signal, var b: [FilterType], var a: [FilterType], inout w: [
     let norm = a[0]
     assert(norm > 0, "First element in A must be nonzero")
     if fabs(norm - 1.0) > FilterType.Epsilon {
-        scale(&b, 1.0 / norm)
+        scale(&b, a: 1.0 / norm)
     }
     
     if N > 1 {
         // IIR Filter Case
         if fabs(norm - 1.0) > FilterType.Epsilon {
-            scale(&a, 1.0 / norm)
+            scale(&a, a: 1.0 / norm)
         }
 
         return { i in

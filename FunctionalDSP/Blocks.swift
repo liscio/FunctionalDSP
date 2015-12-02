@@ -22,7 +22,7 @@ public protocol BlockType {
 }
 
 public struct Block: BlockType {
-    typealias SignalType = Signal
+    public typealias SignalType = Signal
     
     public let inputCount: Int
     public let outputCount: Int
@@ -92,7 +92,7 @@ public func merge<B: BlockType where B.SignalType == Signal>(lhs: B, rhs: B) -> 
             for j in 0..<k {
                 inputsToSum.append(leftOutputs[i+(rhs.inputCount*j)])
             }
-            let summed = inputsToSum.reduce(NullSignal) { mix($0, $1) }
+            let summed = inputsToSum.reduce(NullSignal) { mix($0, s2: $1) }
             rightInputs.append(summed)
         }
 
@@ -132,20 +132,20 @@ infix operator >- { associativity left }
 
 // Parallel
 public func |-<B: BlockType>(lhs: B, rhs: B) -> B {
-    return parallel(lhs, rhs)
+    return parallel(lhs, rhs: rhs)
 }
 
 // Serial
 public func --<B: BlockType>(lhs: B, rhs: B) -> B {
-    return serial(lhs, rhs)
+    return serial(lhs, rhs: rhs)
 }
 
 // Split
 public func -<<B: BlockType>(lhs: B, rhs: B) -> B {
-    return split(lhs, rhs)
+    return split(lhs, rhs: rhs)
 }
 
 // Merge
 public func >-<B: BlockType where B.SignalType == Signal>(lhs: B, rhs: B) -> B {
-    return merge(lhs, rhs)
+    return merge(lhs, rhs: rhs)
 }

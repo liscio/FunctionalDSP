@@ -19,8 +19,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         engine.attachNode(playerNode)
         engine.connect(playerNode, to: engine.mainMixerNode, format: engine.mainMixerNode.inputFormatForBus(0))
         
-        var error: NSError? = nil
-        if !engine.startAndReturnError(&error) {
+        do {
+            try engine.start()
+        } catch {
             NSLog("Error starting audio engine: \(error)")
         }
         
