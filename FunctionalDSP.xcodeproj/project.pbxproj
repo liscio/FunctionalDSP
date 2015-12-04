@@ -315,6 +315,7 @@
 		83D1DCD81AACEF83007915C2 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0630;
 				ORGANIZATIONNAME = "SuperMegaUltraGroovy, Inc.";
 				TargetAttributes = {
@@ -708,6 +709,7 @@
 				83E8D5FD1ADDC82B00B3DC9F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		83E8D5FE1ADDC82B00B3DC9F /* Build configuration list for PBXNativeTarget "TestPlaybackTests" */ = {
 			isa = XCConfigurationList;
@@ -716,6 +718,7 @@
 				83E8D6001ADDC82B00B3DC9F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

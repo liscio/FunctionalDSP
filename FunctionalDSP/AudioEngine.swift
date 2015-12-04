@@ -14,11 +14,11 @@ public protocol BufferQueueType {
     var processor: BufferType -> Bool { get }
     
     func acquireBuffer() -> BufferType?
-    func releaseBuffer(BufferType)
+    func releaseBuffer(_: BufferType)
 }
 
 public final class AVAudioPCMBufferQueue: BufferQueueType {
-    typealias BufferType = AVAudioPCMBuffer
+    public typealias BufferType = AVAudioPCMBuffer
     private let buffers: [AVAudioPCMBuffer]
     private var availableBuffers: [AVAudioPCMBuffer]
     private(set) public var processor: AVAudioPCMBuffer -> Bool
@@ -111,11 +111,11 @@ public func playTone(playerNode: AVAudioPlayerNode) {
     
     dispatch_async( playbackQueue ) {
         while let audioBuffer = theQueue.acquireBuffer() {
-            playerNode.scheduleBuffer(audioBuffer, atTime: nil, options: nil) {
+            playerNode.scheduleBuffer(audioBuffer, atTime: nil, options: AVAudioPlayerNodeBufferOptions()) {
                 theQueue.releaseBuffer(audioBuffer)
             }
         }
         
-        println( "all done. shutting down." )
+        print( "all done. shutting down." )
     }
 }
