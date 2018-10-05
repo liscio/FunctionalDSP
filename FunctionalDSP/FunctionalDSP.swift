@@ -13,7 +13,7 @@ import Accelerate
 public typealias ParameterType = Double
 public typealias SampleType = Float
 
-public typealias Signal = Int -> SampleType
+public typealias Signal = (Int) -> SampleType
 
 public func NullSignal(_: Int) -> SampleType {
     return 0
@@ -22,7 +22,7 @@ public func NullSignal(_: Int) -> SampleType {
 // MARK: Basic Operations
 
 /// Scale a signal by a given amplitude
-public func scale(s: Signal, amplitude: ParameterType) -> Signal {
+public func scale(_ s: @escaping Signal, amplitude: ParameterType) -> Signal {
     return { i in
         return SampleType(s(i) * SampleType(amplitude))
     }
@@ -31,14 +31,14 @@ public func scale(s: Signal, amplitude: ParameterType) -> Signal {
 // MARK: Mixing
 
 /// Mix two signals together
-public func mix(s1: Signal, s2: Signal) -> Signal {
+public func mix(_ s1: @escaping Signal, s2: @escaping Signal) -> Signal {
     return { i in
         return s1(i) + s2(i)
     }
 }
 
 /// Mix an arbitrary number of signals together
-public func mix(signals: [Signal]) -> Signal {
+public func mix(_ signals: [Signal]) -> Signal {
     return { i in
         return signals.reduce(SampleType(0)) { $0 + $1(i) }
     }
@@ -47,7 +47,7 @@ public func mix(signals: [Signal]) -> Signal {
 // MARK: Generators
 
 /// Generate a sine wave
-public func sineWave(sampleRate: Int, frequency: ParameterType) -> Signal {
+public func sineWave(_ sampleRate: Int, frequency: ParameterType) -> Signal {
     let phi = frequency / ParameterType(sampleRate)
     return { i in
         return SampleType(sin(2.0 * ParameterType(i) * phi * ParameterType(M_PI)))
@@ -64,7 +64,7 @@ public func whiteNoise() -> Signal {
 // MARK: Output
 
 /// Read count samples from the signal starting at the specified index
-public func getOutput(signal: Signal, index: Int, count: Int) -> [SampleType] {
+public func getOutput(_ signal: Signal, index: Int, count: Int) -> [SampleType] {
     return [Int](index..<count).map { signal($0) }
 }
 
@@ -87,18 +87,19 @@ public struct PinkFilter {
 }
 
 var gFilt = PinkFilter()
-public func pinkFilter(x: Signal) -> Signal {
+public func pinkFilter(_ x: @escaping Signal) -> Signal {
     return filt(x, b: gFilt.b, a: gFilt.a, w: &gFilt.w)
 }
 
-public func filt(x: Signal, var b: [FilterType], var a: [FilterType], inout w: [FilterType]!) -> Signal {
+public func filt(_ x: @escaping Signal, b: [FilterType], a: [FilterType], w: inout [FilterType]!) -> Signal {
+    var b = b, a = a
     let N = a.count
     let M = b.count
     let MN = max(N, M)
     let lw = MN - 1
     
     if w == nil {
-        w = [FilterType](count: lw, repeatedValue: 0)
+        w = [FilterType](repeating: 0, count: lw)
     }
     assert(w.count == lw)
 
@@ -112,13 +113,13 @@ public func filt(x: Signal, var b: [FilterType], var a: [FilterType], inout w: [
     let norm = a[0]
     assert(norm > 0, "First element in A must be nonzero")
     if fabs(norm - 1.0) > FilterType.Epsilon {
-        scale(&b, a: 1.0 / norm)
+        scale(b, amplitude: 1.0 / norm)
     }
     
     if N > 1 {
         // IIR Filter Case
         if fabs(norm - 1.0) > FilterType.Epsilon {
-            scale(&a, a: 1.0 / norm)
+            scale(a, amplitude: 1.0 / norm)
         }
 
         return { i in

@@ -10,7 +10,7 @@ import Foundation
 import CoreAudio
 import AudioToolbox
 
-func audioCallFailed(status: OSStatus) -> OSStatus? {
+func audioCallFailed(_ status: OSStatus) -> OSStatus? {
     if ( status != noErr ) {
         return status
     }
@@ -19,22 +19,22 @@ func audioCallFailed(status: OSStatus) -> OSStatus? {
 
 extension SampleType {
     static var audioByteSize: UInt32 {
-        return UInt32(sizeof(self))
+        return UInt32(MemoryLayout.size(ofValue: self))
     }
 }
 
 public protocol AudioConverter {
-    var audioConverter: AudioConverterRef { get }
+    var audioConverter: AudioConverterRef? { get }
     
     var inputStreamDescription: AudioStreamBasicDescription { get set }
     var outputStreamDescription: AudioStreamBasicDescription { get set }
 }
 
-public class LPCMAudioConverter: AudioConverter {
-    private(set) public var audioConverter = AudioConverterRef()
+open class LPCMAudioConverter: AudioConverter {
+    public var audioConverter: AudioConverterRef? = nil
     
-    public var inputStreamDescription: AudioStreamBasicDescription
-    public var outputStreamDescription: AudioStreamBasicDescription
+    open var inputStreamDescription: AudioStreamBasicDescription
+    open var outputStreamDescription: AudioStreamBasicDescription
     
     public init?(inputFormat: AudioStreamBasicDescription, outputFormat: AudioStreamBasicDescription) {
         inputStreamDescription = inputFormat
@@ -47,29 +47,29 @@ public class LPCMAudioConverter: AudioConverter {
     }
     
     deinit {
-        if let status = audioCallFailed(AudioConverterDispose(audioConverter)) {
+        if let status = audioCallFailed(AudioConverterDispose(audioConverter!)) {
             print("Failed to dispose audio converter. \(status)")
         }
-        audioConverter = AudioConverterRef()
+        audioConverter = nil
     }
     
-    public func convertSamplesInBuffer(inputBuffer: UnsafePointer<Void>, withLength inputLength: Int, toBuffer outputBuffer: UnsafeMutablePointer<Void>, inout withLength outputLength: Int) {
+    open func convertSamplesInBuffer(_ inputBuffer: UnsafeRawPointer, withLength inputLength: Int, toBuffer outputBuffer: UnsafeMutableRawPointer, withLength outputLength: inout Int) {
         var uOutputLength = UInt32(outputLength)
-        if let status = audioCallFailed(AudioConverterConvertBuffer(audioConverter, UInt32(inputLength), inputBuffer, &uOutputLength, outputBuffer)) {
+        if let status = audioCallFailed(AudioConverterConvertBuffer(audioConverter!, UInt32(inputLength), inputBuffer, &uOutputLength, outputBuffer)) {
             print( "Failed to convert audio data for writing. \(status)" )
         }
         outputLength = Int(uOutputLength)
     }
 }
 
-public class AudioFile {
-    var audioFileID = AudioFileID()
+open class AudioFile {
+    var audioFileID: AudioFileID? = nil
     var audioConverter: LPCMAudioConverter!
     var fileType: AudioFileTypeID = 0
     
-    public let sampleRate: Int
-    public let channelCount: Int
-    public let bitDepth: Int
+    open let sampleRate: Int
+    open let channelCount: Int
+    open let bitDepth: Int
 
     var fileOpened: Bool = false
     
@@ -101,7 +101,7 @@ public class AudioFile {
             mReserved: UInt32(0))
     }
     
-    public init?(forWritingToURL url: NSURL, withBitDepth bitDepth: Int, sampleRate: Int, channelCount: Int = 1) {
+    public init?(forWritingToURL url: URL, withBitDepth bitDepth: Int, sampleRate: Int, channelCount: Int = 1) {
         self.sampleRate = sampleRate
         self.channelCount = channelCount
         self.bitDepth = bitDepth
@@ -112,7 +112,7 @@ public class AudioFile {
             self.fileType = fileType
             
             var destinationFormat = fileStreamDescription
-            if let status = audioCallFailed(AudioFileCreateWithURL(url as CFURL, self.fileType, &destinationFormat, AudioFileFlags.EraseFile, &audioFileID)) {
+            if let status = audioCallFailed(AudioFileCreateWithURL(url as CFURL, self.fileType, &destinationFormat, AudioFileFlags.eraseFile, &audioFileID)) {
                 print( "Failed to open audio file for writing with status \(status): \(url)" )
                 return nil;
             }
@@ -131,10 +131,10 @@ public class AudioFile {
     }
     
     func destroyAudioObjects() {
-        if let status = audioCallFailed(AudioFileClose(audioFileID)) {
+        if let status = audioCallFailed(AudioFileClose(audioFileID!)) {
             print("Failed to close audio file. \(status)")
         }
-        audioFileID = AudioFileID()
+        audioFileID = nil
         fileOpened = false
     }
     
@@ -148,27 +148,27 @@ public class AudioFile {
         }
     }
     
-    public func close() {
+    open func close() {
         destroyAudioObjects()
     }
     
     var writeBufferSize = 0
-    var writeBuffer: UnsafeMutablePointer<UInt8> = nil
+    var writeBuffer: UnsafeMutablePointer<UInt8>? = nil
     
     func destroyAudioBuffer() {
-        writeBuffer.dealloc(writeBufferSize)
+        writeBuffer?.deallocate(capacity: writeBufferSize)
         writeBufferSize = 0
         writeBuffer = nil
     }
     
-    func allocateAudioBufferWithSize(size: Int) {
+    func allocateAudioBufferWithSize(_ size: Int) {
         writeBufferSize = size
-        writeBuffer = UnsafeMutablePointer.alloc(writeBufferSize)
+        writeBuffer = UnsafeMutablePointer.allocate(capacity: writeBufferSize)
     }
     
     var fileWritePosition: Int64 = 0
     
-    public func writeSamples(samples: [SampleType]) -> Bool {
+    open func writeSamples(_ samples: [SampleType]) -> Bool {
         assert(fileOpened)
         
         let outputByteSize = samples.count * Int(fileStreamDescription.mBytesPerFrame)
@@ -181,10 +181,10 @@ public class AudioFile {
         }
 
         var convertedSize = outputByteSize
-        audioConverter.convertSamplesInBuffer(samples, withLength: samples.count * sizeof(SampleType), toBuffer: writeBuffer, withLength: &convertedSize)
+        audioConverter.convertSamplesInBuffer(samples, withLength: samples.count * MemoryLayout<SampleType>.size, toBuffer: writeBuffer!, withLength: &convertedSize)
         
         var uSize = UInt32(convertedSize)
-        if let status = audioCallFailed(AudioFileWriteBytes(audioFileID, false, fileWritePosition, &uSize, writeBuffer)) {
+        if let status = audioCallFailed(AudioFileWriteBytes(audioFileID!, false, fileWritePosition, &uSize, writeBuffer!)) {
             print( "Failed to write audio data to file. \(status)" )
             return false
         }
@@ -194,9 +194,9 @@ public class AudioFile {
         return true
     }
     
-    func inferTypeFromURL(url: NSURL) -> AudioFileTypeID? {
-        if let fileExtension = url.pathExtension?.lowercaseString {
-            switch fileExtension.lowercaseString {
+    func inferTypeFromURL(_ url: URL?) -> AudioFileTypeID? {
+        if let fileExtension = url?.pathExtension.lowercased() {
+            switch fileExtension.lowercased() {
             case "aif", "aiff":
                 return AudioFileTypeID(kAudioFileAIFFType)
             case "wav", "wave":
