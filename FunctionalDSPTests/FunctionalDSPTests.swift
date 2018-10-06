@@ -50,10 +50,10 @@ class FunctionalDSPTests: XCTestCase {
         
         let silence = [SampleType](repeating: 0, count: toneDuration)
 
-        if let af = AudioFile(forWritingToURL: URL(fileURLWithPath: "/Users/chris/testfile.wav")!,withBitDepth: 16, sampleRate: 44100, channelCount: 1) {
+        if let af = AudioFile(forWritingToURL: URL(fileURLWithPath: "/Users/chris/testfile.wav"),withBitDepth: 16, sampleRate: 44100, channelCount: 1) {
             
             for signal in signals {
-                af.writeSamples(getOutput(signal.process([])[0], 0, toneDuration))
+                af.writeSamples(getOutput(signal.process([])[0], index: 0, count: toneDuration))
                 af.writeSamples(silence)
             }
             
@@ -72,16 +72,16 @@ class FunctionalDSPTests: XCTestCase {
         
         let pinkNoise = whiteBlock -- filterBlock
         
-        if let af = AudioFile(forWritingToURL: URL(fileURLWithPath: "/Users/chris/testwhite.wav")!,withBitDepth: 16, sampleRate: 44100, channelCount: 1) {
-            af.writeSamples(getOutput(whiteBlock.process([])[0], 0, 88200))
+        if let af = AudioFile(forWritingToURL: URL(fileURLWithPath: "/Users/chris/testwhite.wav"),withBitDepth: 16, sampleRate: 44100, channelCount: 1) {
+            af.writeSamples(getOutput(whiteBlock.process([])[0], index: 0, count: 88200))
             af.close()
             XCTAssertTrue(true, "yay")
         } else {
             XCTAssertTrue(false, "oops")
         }
         
-        if let af = AudioFile(forWritingToURL: URL(fileURLWithPath: "/Users/chris/testpink.wav")!,withBitDepth: 16, sampleRate: 44100, channelCount: 1) {
-            af.writeSamples(getOutput(pinkNoise.process([])[0], 0, 88200))
+        if let af = AudioFile(forWritingToURL: URL(fileURLWithPath: "/Users/chris/testpink.wav"),withBitDepth: 16, sampleRate: 44100, channelCount: 1) {
+            af.writeSamples(getOutput(pinkNoise.process([])[0], index: 0, count: 88200))
             af.close()
             XCTAssertTrue(true, "yay")
         } else {
