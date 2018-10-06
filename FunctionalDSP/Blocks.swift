@@ -13,27 +13,30 @@ import Foundation
 
 /// A block has zero or more inputs, and produces zero or more outputs
 public protocol BlockType {
+
+    init(inputCount: Int, outputCount: Int, process: @escaping ([SignalType]) -> [SignalType])
+
     associatedtype SignalType
     var inputCount: Int { get }
     var outputCount: Int { get }
     var process: ([SignalType]) -> [SignalType] { get }
     
-    init(inputCount: Int, outputCount: Int, process: ([SignalType]) -> [SignalType])
 }
 
 public struct Block: BlockType {
-    init(inputCount: Int, outputCount: Int, process: @escaping ([Signal]) -> [Signal]) {
+
+    public init(inputCount: Int, outputCount: Int, process: @escaping ([Signal]) -> [Signal]) {
         self.inputCount = inputCount
         self.outputCount = outputCount
         self.process = process
     }
 
     public typealias SignalType = Signal
-    
+
     public var inputCount: Int
     public var outputCount: Int
     public var process: ([Signal]) -> [Signal]
-    
+
 }
 
 public func identity(_ inputs: Int) -> Block {
