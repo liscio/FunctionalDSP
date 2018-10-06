@@ -129,10 +129,13 @@ public func split<B: BlockType>(_ lhs: B, rhs: B) -> B {
 
 // MARK: Operators
 
-infix operator |- { associativity left }
-infix operator -- { associativity left }
-infix operator -< { associativity left }
-infix operator >- { associativity left }
+precedencegroup op_prec {
+    associativity: left
+}
+infix operator |- : op_prec
+infix operator -- : op_prec
+infix operator -< : op_prec
+infix operator >- : op_prec
 
 // Parallel
 public func |-<B: BlockType>(lhs: B, rhs: B) -> B {

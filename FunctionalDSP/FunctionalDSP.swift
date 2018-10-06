@@ -22,7 +22,7 @@ public func NullSignal(_: Int) -> SampleType {
 // MARK: Basic Operations
 
 /// Scale a signal by a given amplitude
-public func scale(_ s: @escaping Signal, amplitude: ParameterType) -> Signal {
+public func signalscale(_ s: @escaping Signal, amplitude: ParameterType) -> Signal {
     return { i in
         return SampleType(s(i) * SampleType(amplitude))
     }
@@ -50,7 +50,7 @@ public func mix(_ signals: [Signal]) -> Signal {
 public func sineWave(_ sampleRate: Int, frequency: ParameterType) -> Signal {
     let phi = frequency / ParameterType(sampleRate)
     return { i in
-        return SampleType(sin(2.0 * ParameterType(i) * phi * ParameterType(M_PI)))
+        return SampleType(sin(2.0 * ParameterType(i) * phi * ParameterType(Double.pi)))
     }
 }
 
@@ -72,13 +72,13 @@ public func getOutput(_ signal: Signal, index: Int, count: Int) -> [SampleType] 
 
 public typealias FilterType = Double
 public extension FilterType {
-    static let Epsilon = DBL_EPSILON
+    static let Epsilon = Double.ulpOfOne
 }
 
 public struct PinkFilter {
     // Filter coefficients from jos: https://ccrma.stanford.edu/~jos/sasp/Example_Synthesis_1_F_Noise.html
-    var b: [FilterType] = [0.049922035, -0.095993537, 0.050612699, -0.004408786];
-    var a: [FilterType] = [1.000000000, -2.494956002, 2.017265875, -0.522189400];
+    var b: [FilterType] = [0.049922035, -0.095993537, 0.050612699, -0.004408786]
+    var a: [FilterType] = [1.000000000, -2.494956002, 2.017265875, -0.522189400]
     
     // The filter's "memory"
     public var w: [FilterType]! = nil
@@ -97,11 +97,12 @@ public func filt(_ x: @escaping Signal, b: [FilterType], a: [FilterType], w: ino
     let M = b.count
     let MN = max(N, M)
     let lw = MN - 1
+    var w = w
     
     if w == nil {
         w = [FilterType](repeating: 0, count: lw)
     }
-    assert(w.count == lw)
+    assert(w?.count == lw)
 
     if b.count < MN {
         b = b + zeros(MN-b.count)
@@ -113,25 +114,27 @@ public func filt(_ x: @escaping Signal, b: [FilterType], a: [FilterType], w: ino
     let norm = a[0]
     assert(norm > 0, "First element in A must be nonzero")
     if fabs(norm - 1.0) > FilterType.Epsilon {
-        scale(b, amplitude: 1.0 / norm)
+        scale(&b, a: 1.0 / norm)
     }
     
     if N > 1 {
         // IIR Filter Case
         if fabs(norm - 1.0) > FilterType.Epsilon {
-            scale(a, amplitude: 1.0 / norm)
+            scale(&a, a: 1.0 / norm)
         }
 
         return { i in
             let xi = FilterType(x(i))
-            let y = w[0] + (b[0] * xi)
+            let y = (w?[0])! + (b[0] * xi)
             if ( lw > 1 ) {
                 for j in 0..<(lw - 1) {
-                    w[j] = w[j+1] + (b[j+1] * xi) - (a[j+1] * y)
+                    let bji = (b[j+1] * xi)
+                    let aji = (a[j+1] * y)
+                    w?[j] = (w?[j+1])! + bji - aji
                 }
-                w[lw-1] = (b[MN-1] * xi) - (a[MN-1] * y)
+                w?[lw-1] = (b[MN-1] * xi) - (a[MN-1] * y)
             } else {
-                w[0] = (b[MN-1] * xi) - (a[MN-1] * y)
+                w?[0] = (b[MN-1] * xi) - (a[MN-1] * y)
             }
             return SampleType(y)
         }
@@ -140,15 +143,15 @@ public func filt(_ x: @escaping Signal, b: [FilterType], a: [FilterType], w: ino
         if lw > 0 {
             return { i in
                 let xi = FilterType(x(i))
-                let y = w[0] + b[0] * xi
+                let y = (w?[0])! + b[0] * xi
                 if ( lw > 1 ) {
                     for j in 0..<(lw - 1) {
-                        w[j] = w[j+1] + (b[j+1] * xi)
+                        w?[j] = (w?[j+1])! + (b[j+1] * xi)
                     }
-                    w[lw-1] = b[MN-1] * xi;
+                    w?[lw-1] = b[MN-1] * xi;
                 }
                 else {
-                    w[0] = b[1] * xi
+                    w?[0] = b[1] * xi
                 }
                 return Float(y)
             }
