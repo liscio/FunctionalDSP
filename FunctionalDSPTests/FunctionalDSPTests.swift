@@ -26,12 +26,12 @@ let dtmfFrequencies = [
     ( 852.0, 1477.0 ),
 ]
 
-func dtmfTone(digit: Int, sampleRate: Int) -> Block {
+func dtmfTone(_ digit: Int, sampleRate: Int) -> Block {
     assert( digit < dtmfFrequencies.count )
     let (f1, f2) = dtmfFrequencies[digit]
     
-    let f1Block = Block(inputCount: 0, outputCount: 1, process: { _ in [sineWave(sampleRate, f1)] })
-    let f2Block = Block(inputCount: 0, outputCount: 1, process: { _ in [sineWave(sampleRate, f2)] })
+    let f1Block = Block(inputCount: 0, outputCount: 1, process: { _ in [sineWave(sampleRate, frequency: f1)] })
+    let f2Block = Block(inputCount: 0, outputCount: 1, process: { _ in [sineWave(sampleRate, frequency: f2)] })
     
     return ( f1Block |- f2Block ) >- Block(inputCount: 1, outputCount: 1, process: { return $0 })
 }
@@ -41,16 +41,16 @@ class FunctionalDSPTests: XCTestCase {
         let sampleRate = 44100
         
         let phoneNumber = [8, 6, 7, 5, 3, 0, 9]
-        let signals = phoneNumber.map { dtmfTone($0, sampleRate) }
+        let signals = phoneNumber.map { dtmfTone($0, sampleRate: sampleRate) }
         
         let toneDuration = Int(Float(sampleRate) * 0.2)
 
         // The below concatenates all the signal samples together in a continuous tone
         // let samples = signals.map { getOutput($0, 0, toneDuration) }.reduce([], combine: +)
         
-        let silence = [SampleType](count: toneDuration, repeatedValue: 0)
+        let silence = [SampleType](repeating: 0, count: toneDuration)
 
-        if let af = AudioFile(forWritingToURL: NSURL(fileURLWithPath: "/Users/chris/testfile.wav")!, withBitDepth: 16, sampleRate: 44100, channelCount: 1) {
+        if let af = AudioFile(forWritingToURL: URL(fileURLWithPath: "/Users/chris/testfile.wav")!,withBitDepth: 16, sampleRate: 44100, channelCount: 1) {
             
             for signal in signals {
                 af.writeSamples(getOutput(signal.process([])[0], 0, toneDuration))
@@ -72,7 +72,7 @@ class FunctionalDSPTests: XCTestCase {
         
         let pinkNoise = whiteBlock -- filterBlock
         
-        if let af = AudioFile(forWritingToURL: NSURL(fileURLWithPath: "/Users/chris/testwhite.wav")!, withBitDepth: 16, sampleRate: 44100, channelCount: 1) {
+        if let af = AudioFile(forWritingToURL: URL(fileURLWithPath: "/Users/chris/testwhite.wav")!,withBitDepth: 16, sampleRate: 44100, channelCount: 1) {
             af.writeSamples(getOutput(whiteBlock.process([])[0], 0, 88200))
             af.close()
             XCTAssertTrue(true, "yay")
@@ -80,7 +80,7 @@ class FunctionalDSPTests: XCTestCase {
             XCTAssertTrue(false, "oops")
         }
         
-        if let af = AudioFile(forWritingToURL: NSURL(fileURLWithPath: "/Users/chris/testpink.wav")!, withBitDepth: 16, sampleRate: 44100, channelCount: 1) {
+        if let af = AudioFile(forWritingToURL: URL(fileURLWithPath: "/Users/chris/testpink.wav")!,withBitDepth: 16, sampleRate: 44100, channelCount: 1) {
             af.writeSamples(getOutput(pinkNoise.process([])[0], 0, 88200))
             af.close()
             XCTAssertTrue(true, "yay")

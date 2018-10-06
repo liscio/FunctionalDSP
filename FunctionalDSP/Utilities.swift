@@ -9,18 +9,20 @@
 import Foundation
 import Accelerate
 
-func scale(inout x: [Float], var a: Float) {
+func scale(_ x: inout [Float], a: Float) {
+    var a = a
     vDSP_vsmul(x, 1, &a, &x, 1, vDSP_Length(x.count))
 }
 
-func scale(inout x: [Double], var a: Double) {
+func scale(_ x: inout [Double], a: Double) {
+    var a = a
     vDSP_vsmulD(x, 1, &a, &x, 1, vDSP_Length(x.count))
 }
 
-func zeros(count: Int) -> [Float] {
-    return [Float](count: count, repeatedValue: 0)
+func zeros(_ count: Int) -> [Float] {
+    return [Float](repeating: 0, count: count)
 }
 
-func zeros(count: Int) -> [Double] {
-    return [Double](count: count, repeatedValue: 0)
+func zeros(_ count: Int) -> [Double] {
+    return [Double](repeating: 0, count: count)
 }

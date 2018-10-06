@@ -13,29 +13,33 @@ import Foundation
 
 /// A block has zero or more inputs, and produces zero or more outputs
 public protocol BlockType {
-    typealias SignalType
+
+    init(inputCount: Int, outputCount: Int, process: @escaping ([SignalType]) -> [SignalType])
+
+    associatedtype SignalType
     var inputCount: Int { get }
     var outputCount: Int { get }
-    var process: [SignalType] -> [SignalType] { get }
+    var process: ([SignalType]) -> [SignalType] { get }
     
-    init(inputCount: Int, outputCount: Int, process: [SignalType] -> [SignalType])
 }
 
 public struct Block: BlockType {
-    public typealias SignalType = Signal
-    
-    public let inputCount: Int
-    public let outputCount: Int
-    public let process: [Signal] -> [Signal]
-    
-    public init(inputCount: Int, outputCount: Int, process: [Signal] -> [Signal]) {
+
+    public init(inputCount: Int, outputCount: Int, process: @escaping ([Signal]) -> [Signal]) {
         self.inputCount = inputCount
         self.outputCount = outputCount
         self.process = process
     }
+
+    public typealias SignalType = Signal
+
+    public var inputCount: Int
+    public var outputCount: Int
+    public var process: ([Signal]) -> [Signal]
+
 }
 
-public func identity(inputs: Int) -> Block {
+public func identity(_ inputs: Int) -> Block {
     return Block(inputCount: inputs, outputCount: inputs, process: { $0 })
 }
 
@@ -46,7 +50,7 @@ public func identity(inputs: Int) -> Block {
 //
 
 /// Runs two blocks serially
-public func serial<B: BlockType>(lhs: B, rhs: B) -> B {
+public func serial<B: BlockType>(_ lhs: B, rhs: B) -> B {
     return B(inputCount: lhs.inputCount, outputCount: rhs.outputCount, process: { inputs in
         return rhs.process(lhs.process(inputs))
     })
@@ -60,7 +64,7 @@ public func serial<B: BlockType>(lhs: B, rhs: B) -> B {
 //
 
 /// Runs two blocks in parallel
-public func parallel<B: BlockType>(lhs: B, rhs: B) -> B {
+public func parallel<B: BlockType>(_ lhs: B, rhs: B) -> B {
     let totalInputs = lhs.inputCount + rhs.inputCount
     let totalOutputs = lhs.outputCount + rhs.outputCount
     
@@ -81,7 +85,7 @@ public func parallel<B: BlockType>(lhs: B, rhs: B) -> B {
 //
 
 /// Merges the outputs of the block on the left to the inputs of the block on the right
-public func merge<B: BlockType where B.SignalType == Signal>(lhs: B, rhs: B) -> B {
+public func merge<B: BlockType>(_ lhs: B, rhs: B) -> B where B.SignalType == Signal {
     return B(inputCount: lhs.inputCount, outputCount: rhs.outputCount, process: { inputs in
         let leftOutputs = lhs.process(inputs)
         var rightInputs: [B.SignalType] = []
@@ -108,7 +112,7 @@ public func merge<B: BlockType where B.SignalType == Signal>(lhs: B, rhs: B) -> 
 //
 
 /// Split the block on the left, replicating its outputs as necessary to fill the inputs of the block on the right
-public func split<B: BlockType>(lhs: B, rhs: B) -> B {
+public func split<B: BlockType>(_ lhs: B, rhs: B) -> B {
     return B(inputCount: lhs.inputCount, outputCount: rhs.outputCount, process: { inputs in
         let leftOutputs = lhs.process(inputs)
         var rightInputs: [B.SignalType] = []
@@ -125,10 +129,13 @@ public func split<B: BlockType>(lhs: B, rhs: B) -> B {
 
 // MARK: Operators
 
-infix operator |- { associativity left }
-infix operator -- { associativity left }
-infix operator -< { associativity left }
-infix operator >- { associativity left }
+precedencegroup op_prec {
+    associativity: left
+}
+infix operator |- : op_prec
+infix operator -- : op_prec
+infix operator -< : op_prec
+infix operator >- : op_prec
 
 // Parallel
 public func |-<B: BlockType>(lhs: B, rhs: B) -> B {
@@ -146,6 +153,6 @@ public func -<<B: BlockType>(lhs: B, rhs: B) -> B {
 }
 
 // Merge
-public func >-<B: BlockType where B.SignalType == Signal>(lhs: B, rhs: B) -> B {
+public func >-<B: BlockType>(lhs: B, rhs: B) -> B where B.SignalType == Signal {
     return merge(lhs, rhs: rhs)
 }

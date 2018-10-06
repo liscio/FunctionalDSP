@@ -10,8 +10,8 @@ import Foundation
 import AVFoundation
 
 public protocol BufferQueueType {
-    typealias BufferType
-    var processor: BufferType -> Bool { get }
+    associatedtype BufferType
+    var processor: (BufferType) -> Bool { get }
     
     func acquireBuffer() -> BufferType?
     func releaseBuffer(_: BufferType)
@@ -19,43 +19,43 @@ public protocol BufferQueueType {
 
 public final class AVAudioPCMBufferQueue: BufferQueueType {
     public typealias BufferType = AVAudioPCMBuffer
-    private let buffers: [AVAudioPCMBuffer]
-    private var availableBuffers: [AVAudioPCMBuffer]
-    private(set) public var processor: AVAudioPCMBuffer -> Bool
-    private var semaphore: dispatch_semaphore_t
+    fileprivate let buffers: [AVAudioPCMBuffer]
+    fileprivate var availableBuffers: [AVAudioPCMBuffer]
+    fileprivate(set) public var processor: (AVAudioPCMBuffer) -> Bool
+    fileprivate var semaphore: DispatchSemaphore
     
-    public init(audioFormat: AVAudioFormat, bufferCount: Int, bufferLength: Int, processor bufferProcessor: AVAudioPCMBuffer -> Bool) {
+    public init(audioFormat: AVAudioFormat, bufferCount: Int, bufferLength: Int, processor bufferProcessor: @escaping (AVAudioPCMBuffer) -> Bool) {
         var allBuffers = [AVAudioPCMBuffer]()
-        for i in 0..<bufferCount {
-            allBuffers.append(AVAudioPCMBuffer(PCMFormat: audioFormat, frameCapacity: AVAudioFrameCount(bufferLength)))
+        for _ in 0..<bufferCount {
+            allBuffers.append(AVAudioPCMBuffer(pcmFormat: audioFormat, frameCapacity: AVAudioFrameCount(bufferLength)))
         }
         buffers = allBuffers
         availableBuffers = [AVAudioPCMBuffer]()
         
         processor = bufferProcessor
-        semaphore = dispatch_semaphore_create(0)
+        semaphore = DispatchSemaphore(value: 0)
     }
     
-    private var rq: dispatch_queue_t = dispatch_queue_create("com.supermegaultragroovy.rq", DISPATCH_QUEUE_SERIAL)
+    fileprivate var rq: DispatchQueue = DispatchQueue(label: "com.supermegaultragroovy.rq", attributes: [])
     
     public func acquireBuffer() -> AVAudioPCMBuffer? {
-        dispatch_semaphore_wait(self.semaphore, DISPATCH_TIME_FOREVER)
+        self.semaphore.wait(timeout: DispatchTime.distantFuture)
         
         var available: AVAudioPCMBuffer?
-        dispatch_sync(rq) {
+        rq.sync {
             if self.availableBuffers.count > 0 {
-                available = self.availableBuffers.removeAtIndex(0)
+                available = self.availableBuffers.remove(at: 0)
             }
         }
         return available
     }
     
-    public func releaseBuffer(buffer: AVAudioPCMBuffer) {
-        dispatch_async(rq) {
+    public func releaseBuffer(_ buffer: AVAudioPCMBuffer) {
+        rq.async {
             if self.processor(buffer) {
                 self.availableBuffers.append(buffer)
             }
-            dispatch_semaphore_signal(self.semaphore)
+            self.semaphore.signal()
         }
     }
     
@@ -69,28 +69,28 @@ public final class AVAudioPCMBufferQueue: BufferQueueType {
 let kActiveBufferCount = 2
 let kSamplesPerBuffer = 4096
 
-public func fillFloats(floats: UnsafeMutablePointer<Float>, withSignal signal: Signal, ofLength length: Int, startingAtSample startSample: Int) {
+public func fillFloats(_ floats: UnsafeMutablePointer<Float>, withSignal signal: Signal, ofLength length: Int, startingAtSample startSample: Int) {
     for i in 0..<length {
         floats[i] = signal(startSample + i)
     }
 }
 
-public func fillPCMBuffer(audioBuffer: AVAudioPCMBuffer, withBlock block: Block, atStartSample startSample: Int) {
+public func fillPCMBuffer(_ audioBuffer: AVAudioPCMBuffer, withBlock block: Block, atStartSample startSample: Int) {
     let channelCount = Int(audioBuffer.format.channelCount)
     assert( channelCount == block.outputCount )
     
     let outputs = block.process([])
     
     for i in 0..<channelCount {
-        fillFloats(audioBuffer.floatChannelData[i], withSignal: outputs[i], ofLength: Int(audioBuffer.frameCapacity), startingAtSample: startSample)
+        fillFloats((audioBuffer.floatChannelData?[i])!, withSignal: outputs[i], ofLength: Int(audioBuffer.frameCapacity), startingAtSample: startSample)
     }
     
     audioBuffer.frameLength = audioBuffer.frameCapacity
 }
 
-public func playTone(playerNode: AVAudioPlayerNode) {
-    let sampleRate = playerNode.outputFormatForBus(0).sampleRate
-    let channelCount = playerNode.outputFormatForBus(0).channelCount
+public func playTone(_ playerNode: AVAudioPlayerNode) {
+    let sampleRate = playerNode.outputFormat(forBus: 0).sampleRate
+    let channelCount = playerNode.outputFormat(forBus: 0).channelCount
     let audioFormat = AVAudioFormat(standardFormatWithSampleRate: sampleRate, channels: channelCount)
     
     let whiteBlock = Block(inputCount: 0, outputCount: 1, process: { _ in [whiteNoise()] })
@@ -107,11 +107,11 @@ public func playTone(playerNode: AVAudioPlayerNode) {
     
     theQueue.prime()
     
-    let playbackQueue = dispatch_queue_create("com.supermegaultragroovy.playerQueue", DISPATCH_QUEUE_SERIAL);
+    let playbackQueue = DispatchQueue(label: "com.supermegaultragroovy.playerQueue", attributes: []);
     
-    dispatch_async( playbackQueue ) {
+    playbackQueue.async {
         while let audioBuffer = theQueue.acquireBuffer() {
-            playerNode.scheduleBuffer(audioBuffer, atTime: nil, options: AVAudioPlayerNodeBufferOptions()) {
+            playerNode.scheduleBuffer(audioBuffer, at: nil, options: AVAudioPlayerNodeBufferOptions()) {
                 theQueue.releaseBuffer(audioBuffer)
             }
         }
