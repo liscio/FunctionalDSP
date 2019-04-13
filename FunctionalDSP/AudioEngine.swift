@@ -27,7 +27,7 @@ public final class AVAudioPCMBufferQueue: BufferQueueType {
     public init(audioFormat: AVAudioFormat, bufferCount: Int, bufferLength: Int, processor bufferProcessor: @escaping (AVAudioPCMBuffer) -> Bool) {
         var allBuffers = [AVAudioPCMBuffer]()
         for _ in 0..<bufferCount {
-            allBuffers.append(AVAudioPCMBuffer(pcmFormat: audioFormat, frameCapacity: AVAudioFrameCount(bufferLength)))
+            allBuffers.append(AVAudioPCMBuffer(pcmFormat: audioFormat, frameCapacity: AVAudioFrameCount(bufferLength))!)
         }
         buffers = allBuffers
         availableBuffers = [AVAudioPCMBuffer]()
@@ -39,7 +39,7 @@ public final class AVAudioPCMBufferQueue: BufferQueueType {
     fileprivate var rq: DispatchQueue = DispatchQueue(label: "com.supermegaultragroovy.rq", attributes: [])
     
     public func acquireBuffer() -> AVAudioPCMBuffer? {
-        self.semaphore.wait(timeout: DispatchTime.distantFuture)
+        _ = self.semaphore.wait(timeout: DispatchTime.distantFuture)
         
         var available: AVAudioPCMBuffer?
         rq.sync {
@@ -99,7 +99,7 @@ public func playTone(_ playerNode: AVAudioPlayerNode) {
     let pinkNoise = whiteBlock -- filterBlock -< identity(Int(channelCount))
     
     var sampleTime = 0
-    let theQueue = AVAudioPCMBufferQueue(audioFormat: audioFormat, bufferCount: kActiveBufferCount, bufferLength: kSamplesPerBuffer) { audioBuffer in
+    let theQueue = AVAudioPCMBufferQueue(audioFormat: audioFormat!, bufferCount: kActiveBufferCount, bufferLength: kSamplesPerBuffer) { audioBuffer in
         fillPCMBuffer(audioBuffer, withBlock: pinkNoise, atStartSample: sampleTime)
         sampleTime += Int(audioBuffer.frameLength)
         return true

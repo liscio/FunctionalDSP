@@ -88,16 +88,16 @@ public struct PinkFilter {
 
 var gFilt = PinkFilter()
 public func pinkFilter(_ x: @escaping Signal) -> Signal {
-    return filt(x, b: gFilt.b, a: gFilt.a, w: &gFilt.w)
+    return filt(x, b: gFilt.b, a: gFilt.a, wi: &gFilt.w)
 }
 
-public func filt(_ x: @escaping Signal, b: [FilterType], a: [FilterType], w: inout [FilterType]!) -> Signal {
+public func filt(_ x: @escaping Signal, b: [FilterType], a: [FilterType], wi: inout [FilterType]!) -> Signal {
     var b = b, a = a
     let N = a.count
     let M = b.count
     let MN = max(N, M)
     let lw = MN - 1
-    var w = w
+    var w = wi
     
     if w == nil {
         w = [FilterType](repeating: 0, count: lw)
@@ -130,7 +130,7 @@ public func filt(_ x: @escaping Signal, b: [FilterType], a: [FilterType], w: ino
                 for j in 0..<(lw - 1) {
                     let bji = (b[j+1] * xi)
                     let aji = (a[j+1] * y)
-                    w?[j] = (w?[j+1])! + bji - aji
+                    w![j] = (w?[j+1])! + bji - aji
                 }
                 w?[lw-1] = (b[MN-1] * xi) - (a[MN-1] * y)
             } else {
@@ -146,7 +146,7 @@ public func filt(_ x: @escaping Signal, b: [FilterType], a: [FilterType], w: ino
                 let y = (w?[0])! + b[0] * xi
                 if ( lw > 1 ) {
                     for j in 0..<(lw - 1) {
-                        w?[j] = (w?[j+1])! + (b[j+1] * xi)
+                        w![j] = (w?[j+1])! + (b[j+1] * xi)
                     }
                     w?[lw-1] = b[MN-1] * xi;
                 }

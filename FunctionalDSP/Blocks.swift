@@ -20,7 +20,7 @@ public protocol BlockType {
     var inputCount: Int { get }
     var outputCount: Int { get }
     var process: ([SignalType]) -> [SignalType] { get }
-    
+
 }
 
 public struct Block: BlockType {
@@ -67,13 +67,13 @@ public func serial<B: BlockType>(_ lhs: B, rhs: B) -> B {
 public func parallel<B: BlockType>(_ lhs: B, rhs: B) -> B {
     let totalInputs = lhs.inputCount + rhs.inputCount
     let totalOutputs = lhs.outputCount + rhs.outputCount
-    
+
     return B(inputCount: totalInputs, outputCount: totalOutputs, process: { inputs in
         var outputs: [B.SignalType] = []
-        
+
         outputs += lhs.process(Array<B.SignalType>(inputs[0..<lhs.inputCount]))
         outputs += rhs.process(Array<B.SignalType>(inputs[lhs.inputCount..<lhs.inputCount+rhs.inputCount]))
-        
+
         return outputs
     })
 }
@@ -116,13 +116,13 @@ public func split<B: BlockType>(_ lhs: B, rhs: B) -> B {
     return B(inputCount: lhs.inputCount, outputCount: rhs.outputCount, process: { inputs in
         let leftOutputs = lhs.process(inputs)
         var rightInputs: [B.SignalType] = []
-        
+
         // Replicate the channels from the lhs to each of the inputs
         let k = lhs.outputCount
         for i in 0..<rhs.inputCount {
             rightInputs.append(leftOutputs[i%k])
         }
-        
+
         return rhs.process(rightInputs)
     })
 }
