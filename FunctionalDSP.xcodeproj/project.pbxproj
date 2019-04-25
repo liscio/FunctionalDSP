@@ -11,14 +11,12 @@
 		83D1DCED1AACEF84007915C2 /* FunctionalDSP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83D1DCE11AACEF84007915C2 /* FunctionalDSP.framework */; };
 		83D1DCF41AACEF84007915C2 /* FunctionalDSPTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D1DCF31AACEF84007915C2 /* FunctionalDSPTests.swift */; };
 		83D1DCFE1AACEFA0007915C2 /* FunctionalDSP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D1DCFD1AACEFA0007915C2 /* FunctionalDSP.swift */; };
-		83D1DD001AACF1AD007915C2 /* AudioFileIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D1DCFF1AACF1AD007915C2 /* AudioFileIO.swift */; };
 		83D1DD021AAD1E54007915C2 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83D1DD011AAD1E54007915C2 /* CoreAudio.framework */; };
 		83D1DD051AAD1F30007915C2 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83D1DD041AAD1F30007915C2 /* AudioToolbox.framework */; };
 		83D1DD061AAD1F3E007915C2 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83D1DD041AAD1F30007915C2 /* AudioToolbox.framework */; };
 		83D1DD071AAD1FA4007915C2 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83D1DD011AAD1E54007915C2 /* CoreAudio.framework */; };
 		83D1DD0E1AAD213A007915C2 /* libswiftCoreAudio.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 83D1DD0D1AAD213A007915C2 /* libswiftCoreAudio.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		83E8D5D81ADD455100B3DC9F /* Blocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E8D5D71ADD455100B3DC9F /* Blocks.swift */; };
-		83E8D5DC1ADDB4B100B3DC9F /* AudioEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E8D5DB1ADDB4B100B3DC9F /* AudioEngine.swift */; };
 		83E8D5E71ADDC82A00B3DC9F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E8D5E61ADDC82A00B3DC9F /* AppDelegate.swift */; };
 		83E8D5E91ADDC82A00B3DC9F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E8D5E81ADDC82A00B3DC9F /* ViewController.swift */; };
 		83E8D5EB1ADDC82A00B3DC9F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83E8D5EA1ADDC82A00B3DC9F /* Images.xcassets */; };
@@ -65,13 +63,10 @@
 		83D1DCF21AACEF84007915C2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		83D1DCF31AACEF84007915C2 /* FunctionalDSPTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionalDSPTests.swift; sourceTree = "<group>"; };
 		83D1DCFD1AACEFA0007915C2 /* FunctionalDSP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FunctionalDSP.swift; sourceTree = "<group>"; };
-		83D1DCFF1AACF1AD007915C2 /* AudioFileIO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioFileIO.swift; sourceTree = "<group>"; };
 		83D1DD011AAD1E54007915C2 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		83D1DD041AAD1F30007915C2 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		83D1DD0D1AAD213A007915C2 /* libswiftCoreAudio.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libswiftCoreAudio.dylib; path = Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/libswiftCoreAudio.dylib; sourceTree = DEVELOPER_DIR; };
 		83E8D5D71ADD455100B3DC9F /* Blocks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Blocks.swift; sourceTree = "<group>"; };
-		83E8D5DB1ADDB4B100B3DC9F /* AudioEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioEngine.swift; sourceTree = "<group>"; };
-		83E8D5DD1ADDC65E00B3DC9F /* PlaybackPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; name = PlaybackPlayground.playground; path = FunctionalDSPTests/PlaybackPlayground.playground; sourceTree = SOURCE_ROOT; };
 		83E8D5E21ADDC82A00B3DC9F /* TestPlayback.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestPlayback.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		83E8D5E51ADDC82A00B3DC9F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		83E8D5E61ADDC82A00B3DC9F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -128,10 +123,11 @@
 				83D1DD041AAD1F30007915C2 /* AudioToolbox.framework */,
 				83D1DD011AAD1E54007915C2 /* CoreAudio.framework */,
 				83D1DCE31AACEF84007915C2 /* FunctionalDSP */,
-				83D1DCF01AACEF84007915C2 /* FunctionalDSPTests */,
-				83E8D5E31ADDC82A00B3DC9F /* TestPlayback */,
-				83E8D5F61ADDC82B00B3DC9F /* TestPlaybackTests */,
+				83D1DCF01AACEF84007915C2 /* Tests/FunctionalDSPTests */,
+				83E8D5E31ADDC82A00B3DC9F /* Tests/TestPlayback */,
+				83E8D5F61ADDC82B00B3DC9F /* Tests/TestPlaybackTests */,
 				83D1DCE21AACEF84007915C2 /* Products */,
+				ED1D9740226A9CDD00E2BA0E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -149,13 +145,10 @@
 		83D1DCE31AACEF84007915C2 /* FunctionalDSP */ = {
 			isa = PBXGroup;
 			children = (
-				83E8D5DD1ADDC65E00B3DC9F /* PlaybackPlayground.playground */,
 				83D1DCE61AACEF84007915C2 /* FunctionalDSP.h */,
 				83D1DCE41AACEF84007915C2 /* Supporting Files */,
 				83D1DCFD1AACEFA0007915C2 /* FunctionalDSP.swift */,
 				83E8D5D71ADD455100B3DC9F /* Blocks.swift */,
-				83D1DCFF1AACF1AD007915C2 /* AudioFileIO.swift */,
-				83E8D5DB1ADDB4B100B3DC9F /* AudioEngine.swift */,
 				83F476FE1AADD14500001FDC /* Utilities.swift */,
 			);
 			path = FunctionalDSP;
@@ -169,13 +162,13 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		83D1DCF01AACEF84007915C2 /* FunctionalDSPTests */ = {
+		83D1DCF01AACEF84007915C2 /* Tests/FunctionalDSPTests */ = {
 			isa = PBXGroup;
 			children = (
 				83D1DCF31AACEF84007915C2 /* FunctionalDSPTests.swift */,
 				83D1DCF11AACEF84007915C2 /* Supporting Files */,
 			);
-			path = FunctionalDSPTests;
+			path = Tests/FunctionalDSPTests;
 			sourceTree = "<group>";
 		};
 		83D1DCF11AACEF84007915C2 /* Supporting Files */ = {
@@ -186,7 +179,7 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		83E8D5E31ADDC82A00B3DC9F /* TestPlayback */ = {
+		83E8D5E31ADDC82A00B3DC9F /* Tests/TestPlayback */ = {
 			isa = PBXGroup;
 			children = (
 				83E8D5E61ADDC82A00B3DC9F /* AppDelegate.swift */,
@@ -195,7 +188,7 @@
 				83E8D5EC1ADDC82A00B3DC9F /* Main.storyboard */,
 				83E8D5E41ADDC82A00B3DC9F /* Supporting Files */,
 			);
-			path = TestPlayback;
+			path = Tests/TestPlayback;
 			sourceTree = "<group>";
 		};
 		83E8D5E41ADDC82A00B3DC9F /* Supporting Files */ = {
@@ -206,13 +199,13 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		83E8D5F61ADDC82B00B3DC9F /* TestPlaybackTests */ = {
+		83E8D5F61ADDC82B00B3DC9F /* Tests/TestPlaybackTests */ = {
 			isa = PBXGroup;
 			children = (
 				83E8D5F91ADDC82B00B3DC9F /* TestPlaybackTests.swift */,
 				83E8D5F71ADDC82B00B3DC9F /* Supporting Files */,
 			);
-			path = TestPlaybackTests;
+			path = Tests/TestPlaybackTests;
 			sourceTree = "<group>";
 		};
 		83E8D5F71ADDC82B00B3DC9F /* Supporting Files */ = {
@@ -221,6 +214,13 @@
 				83E8D5F81ADDC82B00B3DC9F /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		ED1D9740226A9CDD00E2BA0E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -398,8 +398,6 @@
 			files = (
 				83F476FF1AADD14500001FDC /* Utilities.swift in Sources */,
 				83E8D5D81ADD455100B3DC9F /* Blocks.swift in Sources */,
-				83E8D5DC1ADDB4B100B3DC9F /* AudioEngine.swift in Sources */,
-				83D1DD001AACF1AD007915C2 /* AudioFileIO.swift in Sources */,
 				83D1DCFE1AACEFA0007915C2 /* FunctionalDSP.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -622,11 +620,11 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = FunctionalDSPTests/Info.plist;
+				INFOPLIST_FILE = Tests/FunctionalDSPTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks @executable_path/Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.supermegaultragroovy.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -639,11 +637,11 @@
 					"$(SDKROOT)",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = FunctionalDSPTests/Info.plist;
+				INFOPLIST_FILE = Tests/FunctionalDSPTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks @executable_path/Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.supermegaultragroovy.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
@@ -658,7 +656,7 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = TestPlayback/Info.plist;
+				INFOPLIST_FILE = Tests/TestPlayback/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.supermegaultragroovy.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -672,7 +670,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = TestPlayback/Info.plist;
+				INFOPLIST_FILE = Tests/TestPlayback/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.supermegaultragroovy.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -693,7 +691,7 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = TestPlaybackTests/Info.plist;
+				INFOPLIST_FILE = Tests/TestPlaybackTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.supermegaultragroovy.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -711,7 +709,7 @@
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = TestPlaybackTests/Info.plist;
+				INFOPLIST_FILE = Tests/TestPlaybackTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.supermegaultragroovy.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";

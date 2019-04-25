@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 SuperMegaUltraGroovy, Inc. All rights reserved.
 //
 
-import Cocoa
+import Foundation
 import XCTest
 import FunctionalDSP
 
@@ -45,20 +45,9 @@ class FunctionalDSPTests: XCTestCase {
 
         let toneDuration = Int(Float(sampleRate) * 0.2)
 
-        let silence = [SampleType](repeating: 0, count: toneDuration)
 
-        if let af = AudioFile(forWritingToURL: URL(fileURLWithPath: "testfile.aif"),withBitDepth: 16, sampleRate: 44100, channelCount: 1) {
-
-            for signal in signals {
-                XCTAssertTrue(
-                    af.writeSamples(getOutput(signal.process([])[0], index: 0, count: toneDuration))
-                )
-                XCTAssertTrue(af.writeSamples(silence))
-            }
-
-            af.close()
-        } else {
-            XCTAssertTrue(false, "oops")
+        for signal in signals {
+            XCTAssertTrue(getOutput(signal.process([])[0], index: 0, count: toneDuration).count > 0)
         }
     }
 
@@ -69,23 +58,15 @@ class FunctionalDSPTests: XCTestCase {
 
         let pinkNoise = whiteBlock -- filterBlock
 
-        if let af = AudioFile(forWritingToURL: URL(fileURLWithPath: "testwhite.aif") ,withBitDepth: 16, sampleRate: 44100, channelCount: 1) {
-            XCTAssertTrue(
-                af.writeSamples(getOutput(whiteBlock.process([])[0], index: 0, count: 88200))
-            )
-            af.close()
-        } else {
-            XCTAssertTrue(false, "oops")
-        }
+         XCTAssertTrue(
+            getOutput(whiteBlock.process([])[0], index: 0, count: 88200).count == 88200
+         )
 
-        if let af = AudioFile(forWritingToURL: URL(fileURLWithPath: "testpink.aif")	,withBitDepth: 16, sampleRate: 44100, channelCount: 1) {
-            XCTAssertTrue(
-                af.writeSamples(getOutput(pinkNoise.process([])[0], index: 0, count: 88200))
-            )
-            af.close()
-        } else {
-            XCTAssertTrue(false, "oops")
-        }
+        XCTAssertTrue(
+            getOutput(pinkNoise.process([])[0], index: 0, count: 88200).count == 88200
+        )
+
+
     }
 
 }

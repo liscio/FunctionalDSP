@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 SuperMegaUltraGroovy, Inc. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
-#import <CoreAudio/CoreAudio.h>
+#import <Foundation/Foundation.h>
+#import <AVFoundation/AVFoundation.h>
 #import <AudioToolbox/AudioToolbox.h>
 
 //! Project version number for FunctionalDSP.

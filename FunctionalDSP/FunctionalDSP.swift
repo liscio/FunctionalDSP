@@ -56,8 +56,9 @@ public func sineWave(_ sampleRate: Int, frequency: ParameterType) -> Signal {
 
 /// Simple white noise generator
 public func whiteNoise() -> Signal {
+    let a = SampleType(arc4random_uniform(UInt32(Int16.max))) / SampleType(Int16.max)
     return { _ in
-        return SampleType(-1.0 + 2.0 * (SampleType(arc4random_uniform(UInt32(Int16.max))) / SampleType(Int16.max)))
+        return SampleType(-1.0 + 2.0 * a)
     }
 }
 
